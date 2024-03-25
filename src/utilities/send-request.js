@@ -1,8 +1,8 @@
 import { getToken } from './users-service';
 
 export default async function sendRequest(url, method = 'GET', payload = null) {
-  // Fetch accepts an options object as the 2nd argument
-  // used to include a data payload, set headers, specifiy the method, etc.
+  // Fetch takes an optional options object as the 2nd argument
+  // used to include a data payload, set headers, etc. 
   const options = { method };
   if (payload) {
     options.headers = { 'Content-Type': 'application/json' };
@@ -10,15 +10,14 @@ export default async function sendRequest(url, method = 'GET', payload = null) {
   }
   const token = getToken();
   if (token) {
-    // Need to add an Authorization header
-    // Use the Logical OR Assignment operator
-    options.headers ||= {};
-    // Older approach
-    // options.headers = options.headers || {};
+    // Ensure headers object exists
+    options.headers = options.headers || {};
+    // Add token to an Authorization header
+    // Prefacing with 'Bearer' is recommended in the HTTP specification
     options.headers.Authorization = `Bearer ${token}`;
   }
   const res = await fetch(url, options);
-  // if res.ok is false then something went wrong
+  // res.ok will be false if the status code set to 4xx in the controller action
   if (res.ok) return res.json();
   throw new Error('Bad Request');
 }

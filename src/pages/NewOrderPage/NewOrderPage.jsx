@@ -14,33 +14,13 @@ export default function NewOrderPage({ user, setUser }) {
   const [activeCat, setActiveCat] = useState('');
   const [cart, setCart] = useState(null);
   const categoriesRef = useRef([]);
+
+  // Use the navigate function to change routes programmatically
   const navigate = useNavigate();
 
-  // The empty dependency array causes the effect
-  // to run ONLY after the FIRST render
-  useEffect(function() {
-    async function getItems() {
-      const items = await itemsAPI.getAll();
-      categoriesRef.current = [...new Set(items.map(item => item.category.name))];
-      setMenuItems(items);
-      setActiveCat(categoriesRef.current[0]);
-    }
-    getItems();
-
-    // Load cart (a cart is the unpaid order for the logged in user)
-    async function getCart() {
-      const cart = await ordersAPI.getCart();
-      setCart(cart);
-    }
-    getCart();
-  }, []);
-
-  /*--- Event Handlers ---*/
   async function handleAddToOrder(itemId) {
-    // 1. Call the addItemToCart function in ordersAPI, passing to it the itemId, and assign the resolved promise to a variable named cart.
-    const updatedCart = await ordersAPI.addItemToCart(itemId);
-    // 2. Update the cart state with the updated cart received from the server
-    setCart(updatedCart);
+    const cart = await ordersAPI.addItemToCart(itemId);
+    setCart(cart);
   }
 
   async function handleChangeQty(itemId, newQty) {
@@ -52,7 +32,25 @@ export default function NewOrderPage({ user, setUser }) {
     await ordersAPI.checkout();
     navigate('/orders');
   }
+  
+  useEffect(function() {
+    async function getItems() {
+      const items = await itemsAPI.getAll();
+      categoriesRef.current = items.reduce((acc, item) => {
+        const cat = item.category.name;
+        return acc.includes(cat) ? acc : [...acc, cat]
+      }, []);
+      setMenuItems(items);
+      setActiveCat(items[0].category.name);
+    }
+    getItems();
 
+    async function getCart() {
+      const cart = await ordersAPI.getCart();
+      setCart(cart);
+    }
+    getCart();
+  }, []);
 
   return (
     <main className="NewOrderPage">
@@ -70,10 +68,10 @@ export default function NewOrderPage({ user, setUser }) {
         menuItems={menuItems.filter(item => item.category.name === activeCat)}
         handleAddToOrder={handleAddToOrder}
       />
-      <OrderDetail
-        order={cart}
-        handleChangeQty={handleChangeQty}
-        handleCheckout={handleCheckout}
+      <OrderDetail 
+        handleChangeQty={handleChangeQty} 
+        order={cart} 
+        handleCheckout={handleCheckout}  
       />
     </main>
   );

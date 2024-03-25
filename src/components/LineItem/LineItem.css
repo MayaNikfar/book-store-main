@@ -31,3 +31,11 @@
   margin: 0;
 }
 
+.LineItem .item-image {
+  height: 6vw;
+  width: 5vw;
+  font-size: 4vw;
+  background-color: var(--tan-1);
+  border: .1vmin solid var(--tan-3);
+  border-radius: 1vmin;
+}
