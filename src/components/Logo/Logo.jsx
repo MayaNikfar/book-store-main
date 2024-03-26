@@ -3,8 +3,8 @@ import './Logo.css';
 export default function Logo() {
   return (
     <div className="Logo">
-      <div>BOOK</div>
-      <div>STORE</div>
+      <div>84000</div>
+      <div>BOOK STORE</div>
     </div>
   );
 }

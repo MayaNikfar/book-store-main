@@ -13,8 +13,10 @@ export default function CategoryList({ categories, activeCat, setActiveCat }) {
     </li>
   );
   return (
-    <ul className="CategoryList">
-      {cats}
-    </ul>
+    <>
+      <ul  class="CategoryList d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom mb-md-0">
+        {cats}
+      </ul>
+    </>
   );
 }

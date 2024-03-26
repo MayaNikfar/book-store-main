@@ -6,6 +6,7 @@ import Logo from '../../components/Logo/Logo';
 import UserLogOut from '../../components/UserLogOut/UserLogOut';
 import OrderList from '../../components/OrderList/OrderList';
 import OrderDetail from '../../components/OrderDetail/OrderDetail';
+import Footer from '../../components/Footer/Footer';
 
 export default function OrderHistoryPage({ user, setUser }) {
   /*--- State --- */
@@ -31,20 +32,23 @@ export default function OrderHistoryPage({ user, setUser }) {
 
   /*--- Rendered UI --- */
   return (
-    <main className="OrderHistoryPage">
-      <aside>
+    <>
+      <div  class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between  ">
+        <Link to="/orders/new" className="button btn-sm">NEW ORDERS</Link>
         <Logo />
-        <Link to="/orders/new" className="button btn-sm">NEW ORDER</Link>
         <UserLogOut user={user} setUser={setUser} />
-      </aside>
-      <OrderList
-        orders={orders}
-        activeOrder={activeOrder}
-        handleSelectOrder={handleSelectOrder}
-      />
-      <OrderDetail
-        order={activeOrder}
-      />
-    </main>
+      </div>
+      <main className="OrderHistoryPage">
+        <OrderList
+          orders={orders}
+          activeOrder={activeOrder}
+          handleSelectOrder={handleSelectOrder}
+        />
+        <OrderDetail
+          order={activeOrder}
+        />
+      </main>
+      <Footer />
+    </>
   );
 }

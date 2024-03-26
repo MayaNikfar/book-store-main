@@ -8,6 +8,8 @@ import MenuList from '../../components/MenuList/MenuList';
 import CategoryList from '../../components/CategoryList/CategoryList';
 import OrderDetail from '../../components/OrderDetail/OrderDetail';
 import UserLogOut from '../../components/UserLogOut/UserLogOut';
+import Footer from '../../components/Footer/Footer';
+
 
 export default function NewOrderPage({ user, setUser }) {
   const [menuItems, setMenuItems] = useState([]);
@@ -53,26 +55,31 @@ export default function NewOrderPage({ user, setUser }) {
   }, []);
 
   return (
-    <main className="NewOrderPage">
-      <aside>
+    <>
+      <div  class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between  ">
+        <Link to="/orders" className="button btn-sm">PREVIOUS ORDERS</Link>
         <Logo />
+        <UserLogOut user={user} setUser={setUser} />
+      </div>
+      <div>
         <CategoryList
           categories={categoriesRef.current}
           activeCat={activeCat}
           setActiveCat={setActiveCat}
+          />
+      </div>
+      <main className="NewOrderPage">
+        <MenuList
+          menuItems={menuItems.filter(item => item.category.name === activeCat)}
+          handleAddToOrder={handleAddToOrder}
         />
-        <Link to="/orders" className="button btn-sm">PREVIOUS ORDERS</Link>
-        <UserLogOut user={user} setUser={setUser} />
-      </aside>
-      <MenuList
-        menuItems={menuItems.filter(item => item.category.name === activeCat)}
-        handleAddToOrder={handleAddToOrder}
-      />
-      <OrderDetail 
-        handleChangeQty={handleChangeQty} 
-        order={cart} 
-        handleCheckout={handleCheckout}  
-      />
-    </main>
+        <OrderDetail 
+          handleChangeQty={handleChangeQty} 
+          order={cart} 
+          handleCheckout={handleCheckout}  
+        />
+      </main>
+      <Footer />
+    </>
   );
 }
