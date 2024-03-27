@@ -1,6 +1,9 @@
+// src/components/OrderDetail/OrderDetails.jsx
+
+import React from 'react';
 import './OrderDetail.css';
 import LineItem from '../LineItem/LineItem';
-// Used to display the details of any order, including the cart (unpaid order)
+
 export default function OrderDetail({ order, handleChangeQty, handleCheckout }) {
   if (!order) return null;
 
@@ -12,6 +15,27 @@ export default function OrderDetail({ order, handleChangeQty, handleCheckout }) 
       key={item._id}
     />
   );
+
+  const handlePayNowClick = async () => {
+    try {
+      const response = await fetch("/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: order.lineItems.map(item => ({ id: item._id, quantity: item.quantity })),
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to create checkout session");
+      }
+      const { url } = await response.json();
+      window.location.href = url;
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
+    }
+  };
 
   return (
     <div className="OrderDetail">
@@ -29,7 +53,9 @@ export default function OrderDetail({ order, handleChangeQty, handleCheckout }) 
             {lineItems}
             <section className="total">
               {order.isPaid ?
-                <span className="right">TOTAL&nbsp;&nbsp;</span>
+                <>
+                  <span className="right">TOTAL&nbsp;&nbsp;</span>
+                </>
                 :
                 <button
                   className="btn-sm"
@@ -42,7 +68,7 @@ export default function OrderDetail({ order, handleChangeQty, handleCheckout }) 
             </section>
           </>
           :
-          <div className="hungry">Place an order.</div>
+          <div className="nothungry">Place an order.</div>
         }
       </div>
     </div>

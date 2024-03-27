@@ -1,3 +1,5 @@
+// models/itemSchema.js
+
 const Schema = require('mongoose').Schema;
 
 const itemSchema = new Schema({
