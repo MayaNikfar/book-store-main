@@ -2,6 +2,10 @@
 
 This is a web application for a book store where users can browse books, add them to their cart, and make purchases. It also includes authentication functionality for users to sign up and log in.
 
+## Screenshot
+
+![Homepage of the BookStore website](./public/bookStoreHome.png)
+
 ## Technologies Used
 
 - **Frontend**: React.js
